@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+</head>
+<body>
+    <h1>Login with MetaMask</h1>
+    <button onclick="loginWithMetaMask()">Login</button>
+
+    <script>
+        async function loginWithMetaMask() {
+    if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+
+        const accounts = await web3.eth.getAccounts();
+        const userAddress = accounts[0];
+        const nonce = Math.floor(Math.random() * 1000000).toString();
+
+        const signature = await web3.eth.personal.sign(`Sign this message to log in: ${nonce}`, userAddress, "");
+
+        console.log("Sending request:", { userAddress, signature, nonce });  // Debugging
+
+        const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userAddress, signature, nonce })  // ✅ Send correct JSON
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            alert("Login Successful!");
+            window.location.href = "/dashboard";
+        } else {
+            alert("Login Failed: " + data.error);
+        }
+    } else {
+        alert("Please install MetaMask.");
+    }
+}
+
+    </script>
+</body>
+</html>

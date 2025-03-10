@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+
+    <h1>Welcome to the Dashboard</h1>
+
+    <% if (role === "instructor") { %>
+        <p>You are an instructor.</p>
+        <a href="/create-course">Create a Course</a>
+    <% } else { %>
+        <p>You are a student.</p>
+    <% } %>
+
+</body>
+</html>
